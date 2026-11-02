@@ -10,5 +10,94 @@
 <body>
   <h1>Hello, world!</h1>
   <p>This is a basic HTML page.</p>
+<form id="contact-form" action="" method="post" onsubmit="return false;">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="section-heading">
+        <h2><em>Contact Us</em> &amp; Get In <span>Touch</span></h2>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <fieldset>
+        <input type="text" name="name" id="name" placeholder="Your Name..." autocomplete="on" required>
+      </fieldset>
+    </div>
+    <div class="col-lg-6">
+      <fieldset>
+        <input type="text" name="surname" id="surname" placeholder="Your Surname..." autocomplete="on" required>
+      </fieldset>
+    </div>
+    <div class="col-lg-6">
+      <fieldset>
+        <input type="email" name="email" id="email" placeholder="Your E-mail..." required>
+      </fieldset>
+    </div>
+    <div class="col-lg-6">
+      <fieldset>
+        <input type="text" name="subject" id="subject" placeholder="Subject..." autocomplete="on">
+      </fieldset>
+    </div>
+    <div class="col-lg-12">
+      <fieldset>
+        <textarea name="message" id="message" placeholder="Your Message"></textarea>
+      </fieldset>
+    </div>
+        <div class="col-lg-12">
+      <fieldset class="consent-checkboxes">
+        <p>
+          <label>
+            <input type="checkbox" name="generic" data-cons-preference="legal_documents" required/>
+            <span>I've read the <a href="https://www.iubenda.com/privacy-policy/57392063" target="_blank" rel="noopener">Privacy Policy</a>, <a href="https://www.iubenda.com/privacy-policy/57392063/cookie-policy" target="_blank" rel="noopener">Cookie Policy</a> and accept the <a href="https://www.iubenda.com/terms-and-conditions/57392063" target="_blank" rel="noopener">Terms and Conditions</a></span>
+          </label> 
+        </p>
+        <p>
+          <label>
+            <input type="checkbox" name="newsletter" data-cons-preference="newsletter"/>
+            I agree to receiving a newsletter with information and offers regarding this service (optional)
+          </label>
+        </p>
+        <p>
+          <label>
+            <input type="checkbox" name="offer" data-cons-preference="offer"/>
+            I agree to receiving a newsletter with information and offers about products and services by third parties (optional)
+          </label>
+        </p>
+      </fieldset>
+    </div>
+    <div class="col-lg-12">
+      <fieldset>
+        <button type="submit" id="contact-submit" class="orange-button">Send Message Now</button>
+      </fieldset>
+    </div>
+  </div>
+</form>
+<!-- load function for sending data to the Consent Database when a user fills in and submits the form -->                
+<script type="text/javascript">
+  _iub.cons_instructions.push(["load", {
+    submitElement: document.getElementById("contact-submit"),
+    form: {
+      selector: document.getElementById("contact-form"),
+      map: {
+        subject: {
+          first_name: "name",
+          last_name: "surname",
+          email: "email"
+        },
+        preferences: {
+          legal_documents: "generic",
+          newsletter: "newsletter",
+          offer: "offer"
+        }
+      }
+    },
+    consent: {
+      legal_notices: [
+        { identifier: "privacy_policy" },
+        { identifier: "cookie_policy" },
+        { identifier: "terms" }
+      ]
+    }
+  }])
+</script>            
 </body>
 </html>
