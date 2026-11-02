@@ -104,17 +104,14 @@
             email: "email"
           },
           preferences: {
+            cookie_preferences: getCookiePreferences(),
             legal_documents: "generic",
             newsletter: "newsletter",
             offer: "offer"
           }
         }
       },
-      consent: {
-        preferences: {
-          cookie_preferences: getCookiePreferences()
-        },
-        legal_notices: [
+         legal_notices: [
           { identifier: "privacy_policy" },
           { identifier: "cookie_policy" },
           { identifier: "terms" }
