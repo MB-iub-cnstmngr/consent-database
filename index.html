@@ -74,29 +74,12 @@
 <!-- load function for sending data to the Consent Database when a user fills in and submits the form -->                
 <script type="text/javascript">
   function getCookiePreferences() {
-    var result = {};
-    var prefs = null;
-
     if (window._iub && _iub.cs && _iub.cs.api &&
         typeof _iub.cs.api.getPreferences === "function") {
-      prefs = _iub.cs.api.getPreferences();
+      var prefs = _iub.cs.api.getPreferences();
+      return prefs ? JSON.parse(JSON.stringify(prefs)) : null;
     }
-
-    (function flatten(obj, prefix) {
-      for (var key in obj) {
-        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
-        var value = obj[key];
-        var name = prefix + "_" + key;
-
-        if (value !== null && typeof value === "object") {
-          flatten(value, name);
-        } else if (value !== undefined && typeof value !== "function") {
-          result[name] = value;
-        }
-      }
-    })(prefs || {}, "cs");
-
-    return result;
+    return null;
   }
 
   var contactForm = document.getElementById("contact-form");
@@ -128,7 +111,9 @@
         }
       },
       consent: {
-        preferences: getCookiePreferences(),
+        preferences: {
+          cookie_preferences: getCookiePreferences()
+        },
         legal_notices: [
           { identifier: "privacy_policy" },
           { identifier: "cookie_policy" },
