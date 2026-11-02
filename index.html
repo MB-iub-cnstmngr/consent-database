@@ -73,31 +73,74 @@
 </form>
 <!-- load function for sending data to the Consent Database when a user fills in and submits the form -->                
 <script type="text/javascript">
-  _iub.cons_instructions.push(["load", {
-    submitElement: document.getElementById("contact-submit"),
-    form: {
-      selector: document.getElementById("contact-form"),
-      map: {
-        subject: {
-          first_name: "name",
-          last_name: "surname",
-          email: "email"
-        },
-        preferences: {
-          legal_documents: "generic",
-          newsletter: "newsletter",
-          offer: "offer"
-        }
-      }
-    },
-    consent: {
-      legal_notices: [
-        { identifier: "privacy_policy" },
-        { identifier: "cookie_policy" },
-        { identifier: "terms" }
-      ]
+  var COOKIE_PURPOSES = {
+    1: "cookie_necessary",
+    2: "cookie_functionality",
+    3: "cookie_experience",
+    4: "cookie_measurement",
+    5: "cookie_marketing"
+  };
+
+  function getCookiePurposes() {
+    var result = {};
+    var prefs = null;
+
+    if (window._iub && _iub.cs && _iub.cs.api &&
+        typeof _iub.cs.api.getPreferences === "function") {
+      prefs = _iub.cs.api.getPreferences();
     }
-  }])
+
+    var purposes = (prefs && prefs.purposes) || {};
+
+    for (var id in COOKIE_PURPOSES) {
+      result[COOKIE_PURPOSES[id]] = purposes[id] === true;
+    }
+
+    return result;
+  }
+
+  var contactForm = document.getElementById("contact-form");
+  var consentSent = false;
+
+  contactForm.addEventListener("submit", function (e) {
+    if (consentSent) return;
+    e.preventDefault();
+
+    var finish = function () {
+      consentSent = true;
+      contactForm.submit();
+    };
+
+    _iub.cons_instructions.push(["submit", {
+      form: {
+        selector: contactForm,
+        map: {
+          subject: {
+            first_name: "name",
+            last_name: "surname",
+            email: "email"
+          },
+          preferences: {
+            legal_documents: "generic",
+            newsletter: "newsletter",
+            offer: "offer"
+          }
+        }
+      },
+      consent: {
+        preferences: getCookiePurposes(),
+        legal_notices: [
+          { identifier: "privacy_policy" },
+          { identifier: "cookie_policy" },
+          { identifier: "terms" }
+        ]
+      }
+    }, {
+      success: finish,
+      error: finish
+    }]);
+  });
+</script>
 </script>            
 </body>
 </html>
